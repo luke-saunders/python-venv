@@ -3,7 +3,7 @@
 #---------------------------------------------------------------------------
 param (
     [string]$venv_name = 'venv',
-    [string]$venv_requirements = '.\requirements*.txt'
+    [string]$requirements = '.\requirements*.txt'
 )
 
 $ascii_title = @"
@@ -24,7 +24,7 @@ Write-Host "Path: $venv_abspath`n" -ForegroundColor Cyan
 # ~~~~~~ Start - Precondition Checks ~~~~~~
 
 # (1) Check $PWD is at project root - must have at least one requirements file
-if ((Get-ChildItem -Path $PWD -Filter $venv_requirements).Count -lt 1) # -or -not (Test-Path -Path ".git"))
+if ((Get-ChildItem -Path $PWD -Filter $requirements).Count -lt 1) # -or -not (Test-Path -Path ".git"))
 {
     Write-Host "ERROR: Ensure that you're in that project root folder." -ForegroundColor Red
     exit 1
@@ -76,7 +76,7 @@ Write-Host "Activating virtual environment" -ForegroundColor Green
 
 # Install libraries
 Write-Host "Installing libraries:" -ForegroundColor Green
-Get-ChildItem -Path $venv_requirements -Recurse | ForEach-Object {
+Get-ChildItem -Path $requirements -Recurse | ForEach-Object {
     Write-Host "---- $($_.Name) ----" -ForegroundColor Green
     & pip.exe install -r $_.FullName --disable-pip-version-check --require-virtualenv --no-cache-dir
 }
